@@ -14,19 +14,23 @@ int main() {
 	// NOTICE: The Default Logger will only print on console, and the LogLevel is Debug.
 	// USAGE: HLOG_DEBUG("MESSAGE");
 	HLOG_DEBUG("test_log");
-
-	logger::LogConfig config;
+	HLOG_INFO("test_log");
+	HLOG_WARN("test_log");
+	HLOG_ERROR("test_log");
+	
+	Logger::LogConfig config;
 	// Keep in mind the name of your Logger, which is the key to using your custom Logger.
 	config.logger_name = "error-file";
 	// Your log file path, support absolute and relative paths.
 	config.log_file_name = "error.log";
-	// Only log Error Message or Fatal Message.
-	config.log_level = logger::LogLevel::kError;
+	// If LogLevel is Error or upper (including Error), message will always be logged.
+	// Otherwise, LogLevel of the message from macro calls is lower than the Logger setted will NOT be logged.
+	config.log_level = Logger::LogLevel::kError;
 	// Do not print on console.
 	config.print_console = false;
 
 	// Add your custom logger to logger pool.
-	loggers::appendLogger(config);
+	LoggerManager::appendLogger(config);
 
 	// Now you can export log with your custom logger.
 	// USAGE: HLOG_ERROR_LOGGER("MESSAGE", "YOUR CURTOM LOGGER NAME");
