@@ -10,6 +10,7 @@
 #define LOGGER_H
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <chrono>
 #include <iomanip>
@@ -94,7 +95,7 @@ public:
 
 	void log(SourceFile sf, int line, const char *fn, const std::string &msg, LogLevel level = LogLevel::kDebug)
 	{
-		if (level<LogLevel::kError &&this->config.log_level> level)
+		if (level < LogLevel::kError && this->config.log_level > level)
 		{
 			return;
 		}
@@ -152,11 +153,11 @@ private:
 	static std::string levelFormat(LogLevel level)
 	{
 		const std::unordered_map<LogLevel, std::string> map = {
-				{LogLevel::kDebug, "DEBUG"},
-				{LogLevel::kInfo, "INFO"},
-				{LogLevel::kWarn, "WARN"},
-				{LogLevel::kError, "ERROR"},
-				{LogLevel::kFatal, "FATAL"}};
+			{LogLevel::kDebug, "DEBUG"},
+			{LogLevel::kInfo, "INFO"},
+			{LogLevel::kWarn, "WARN"},
+			{LogLevel::kError, "ERROR"},
+			{LogLevel::kFatal, "FATAL"}};
 		return map.at(level);
 	}
 
@@ -226,28 +227,28 @@ private:
 // NOTICE: The Default Logger will only print on console, and the LogLevel is Debug.
 Logger LoggerManager::default_logger = Logger();
 std::unordered_map<std::string, Logger *> LoggerManager::_instances = {
-		{"default", &default_logger}};
+	{"default", &default_logger}};
 
 // define macros
 #define HLOG_DEBUG_LOGGER(MSG, LOGGER) \
-	if (LoggerManager::exists(LOGGER))         \
+	if (LoggerManager::exists(LOGGER)) \
 	LoggerManager::getLogger(LOGGER)->log(__FILE__, __LINE__, __FUNCTION__, MSG)
-#define HLOG_INFO_LOGGER(MSG, LOGGER)                                    \
+#define HLOG_INFO_LOGGER(MSG, LOGGER)                                            \
 	if (LoggerManager::exists(LOGGER))                                           \
 	LoggerManager::getLogger(LOGGER)->log(__FILE__, __LINE__, __FUNCTION__, MSG, \
-																	Logger::LogLevel::kInfo)
-#define HLOG_WARN_LOGGER(MSG, LOGGER)                                    \
+										  Logger::LogLevel::kInfo)
+#define HLOG_WARN_LOGGER(MSG, LOGGER)                                            \
 	if (LoggerManager::exists(LOGGER))                                           \
 	LoggerManager::getLogger(LOGGER)->log(__FILE__, __LINE__, __FUNCTION__, MSG, \
-																	Logger::LogLevel::kWarn)
-#define HLOG_ERROR_LOGGER(MSG, LOGGER)                                   \
+										  Logger::LogLevel::kWarn)
+#define HLOG_ERROR_LOGGER(MSG, LOGGER)                                           \
 	if (LoggerManager::exists(LOGGER))                                           \
 	LoggerManager::getLogger(LOGGER)->log(__FILE__, __LINE__, __FUNCTION__, MSG, \
-																	Logger::LogLevel::kError)
-#define HLOG_FATAL_LOGGER(MSG, LOGGER)                                   \
+										  Logger::LogLevel::kError)
+#define HLOG_FATAL_LOGGER(MSG, LOGGER)                                           \
 	if (LoggerManager::exists(LOGGER))                                           \
 	LoggerManager::getLogger(LOGGER)->log(__FILE__, __LINE__, __FUNCTION__, MSG, \
-																	Logger::LogLevel::kFatal)
+										  Logger::LogLevel::kFatal)
 
 #define HLOG_DEBUG(MSG) HLOG_DEBUG_LOGGER(MSG, "default")
 #define HLOG_INFO(MSG) HLOG_INFO_LOGGER(MSG, "default")
